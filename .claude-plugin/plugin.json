@@ -1,15 +1,14 @@
 {
   "name": "vibe-builder",
   "version": "1.0.0",
-  "description": "Take someone from zero to vibe coding hero with GitHub and Vercel. Perfect for beginners who want to start building and deploying web apps.",
+  "description": "Takes you from zero to vibe coding hero with GitHub and Vercel. Perfect for beginners who want to start building and deploying web apps.",
   "author": {
-    "name": "Claude"
+    "name": "James Barney",
+    "email": "james@southendsolutions.com",
+    "url": "https://github.com/Barneyjm/vibe-builder"
   },
   "homepage": "https://github.com/Barneyjm/vibe-builder",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Barneyjm/vibe-builder.git"
-  },
+  "repository": "https://github.com/Barneyjm/vibe-builder",
   "license": "MIT",
   "keywords": [
     "beginner",
