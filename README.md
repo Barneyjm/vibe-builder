@@ -46,7 +46,7 @@ Create a new Next.js application with TypeScript and Tailwind CSS.
 **Perfect for:** Users ready to start a new project.
 
 ### `/vibe-builder:deploy`
-Set up GitHub Actions for automatic deployments to Vercel.
+Connect your GitHub repo to Vercel for automatic deployments.
 
 **Perfect for:** Users who want push = deploy (automatic deployments on git push).
 
@@ -59,7 +59,7 @@ Start a vibe coding session to build features with natural language.
 
 The key philosophy: **pushing code should deploy your site**. No extra commands.
 
-This plugin sets up GitHub Actions to automatically deploy to Vercel whenever you push:
+This plugin connects your GitHub repo to Vercel's native integration. Once linked:
 
 ```bash
 git add .
@@ -68,7 +68,7 @@ git push
 # That's it! Site updates automatically.
 ```
 
-No need to remember deployment commands. No manual steps. Just push.
+No secrets to manage. No workflow files. Vercel handles everything.
 
 ## Tech Stack
 
@@ -77,9 +77,8 @@ This plugin uses an opinionated but beginner-friendly stack:
 - **Next.js** - React framework with great defaults
 - **TypeScript** - Catches errors before runtime
 - **Tailwind CSS** - Utility-first styling that's easy to learn
-- **Vercel** - Fast global hosting
+- **Vercel** - Fast global hosting with native GitHub integration
 - **GitHub** - Code hosting and collaboration
-- **GitHub Actions** - Automatic deployments on push
 
 ## Example Session
 

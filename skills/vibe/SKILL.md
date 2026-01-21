@@ -134,12 +134,7 @@ That's it! GitHub Actions automatically deploys to Vercel.
 
 **Explain**: "Pushing your code automatically updates your live site. No extra steps needed!"
 
-After pushing, you can show them the deployment:
-```bash
-gh run watch
-```
-
-Or just wait ~1 minute and refresh their live site.
+After pushing, Vercel automatically picks up the changes and deploys. Just wait ~1 minute and refresh their live site.
 
 "Your changes are now live! Check [their-site].vercel.app"
 
