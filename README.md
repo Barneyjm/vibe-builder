@@ -15,13 +15,17 @@ Vibe Builder is a beginner-friendly plugin that guides complete newcomers throug
 No prior coding experience required.
 
 ## Installation
+Run these commands inside Claude Code:
 
 ```bash
-# Load the plugin when starting Claude Code
-claude --plugin-dir /path/to/vibe-builder
-
-# Or add to your plugin configuration
+/plugin marketplace barneyjm/vibe-builder
 ```
+
+```bash
+/plugin install vibe-builder@vibe-builder
+```
+
+Restart Claude Code to load the plugin
 
 ## Available Skills
 
