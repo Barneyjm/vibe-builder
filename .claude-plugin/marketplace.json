@@ -1,0 +1,37 @@
+{
+  "name": "vibe-builder",
+  "owner": "Barneyjm",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "vibe-builder",
+      "source": "./",
+      "description": "Take someone from zero to vibe coding hero with GitHub and Vercel. Perfect for beginners who want to start building and deploying web apps.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Claude"
+      },
+      "homepage": "https://github.com/Barneyjm/vibe-builder",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Barneyjm/vibe-builder.git"
+      },
+      "license": "MIT",
+      "keywords": [
+        "beginner",
+        "vibe-coding",
+        "deployment",
+        "vercel",
+        "github",
+        "nextjs",
+        "onboarding"
+      ],
+      "category": "developer-tools",
+      "tags": [
+        "beginner-friendly",
+        "deployment",
+        "web-development"
+      ]
+    }
+  ]
+}
