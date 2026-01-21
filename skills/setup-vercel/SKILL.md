@@ -14,7 +14,7 @@ Ask if they already have a Vercel account. If not:
 1. Open the signup page in their browser:
    - macOS: `open https://vercel.com/signup`
    - Linux: `xdg-open https://vercel.com/signup`
-   - Windows: `start https://vercel.com/signup`
+   - Windows: `start "" "https://vercel.com/signup"`
 
 2. **Strongly recommend** signing up with GitHub:
    - Click "Continue with GitHub"

@@ -14,7 +14,7 @@ Ask if they already have a GitHub account. If not:
 1. Open the signup page in their browser:
    - macOS: `open https://github.com/signup`
    - Linux: `xdg-open https://github.com/signup`
-   - Windows: `start https://github.com/signup`
+   - Windows: `start "" "https://github.com/signup"`
 
 2. Guide them through signup:
    - "Enter your email address"

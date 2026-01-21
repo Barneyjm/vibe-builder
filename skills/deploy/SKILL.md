@@ -65,7 +65,7 @@ vercel project ls
 Then open the Vercel dashboard:
 - macOS: `open https://vercel.com/dashboard`
 - Linux: `xdg-open https://vercel.com/dashboard`
-- Windows: `start https://vercel.com/dashboard`
+- Windows: `start "" "https://vercel.com/dashboard"`
 
 Guide them:
 1. Click on their project

@@ -90,7 +90,7 @@ npm run dev
 Open the browser to see it:
 - macOS: `open http://localhost:3000`
 - Linux: `xdg-open http://localhost:3000`
-- Windows: `start http://localhost:3000`
+- Windows: `start "" "http://localhost:3000"`
 
 **Exciting moment**: "Your app is running! You should see the Next.js welcome page."
 

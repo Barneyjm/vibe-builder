@@ -25,7 +25,7 @@ npm run dev
 And open the browser if needed:
 - macOS: `open http://localhost:3000`
 - Linux: `xdg-open http://localhost:3000`
-- Windows: `start http://localhost:3000`
+- Windows: `start "" "http://localhost:3000"`
 
 ## How Vibe Coding Works
 
