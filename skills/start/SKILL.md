@@ -25,7 +25,7 @@ If they don't have GitHub:
 1. Open their browser to https://github.com/signup using the appropriate command for their OS:
    - macOS: `open https://github.com/signup`
    - Linux: `xdg-open https://github.com/signup`
-   - Windows: `start https://github.com/signup`
+   - Windows: `start "" "https://github.com/signup"`
 2. Walk them through the signup process step by step
 3. Help them install the GitHub CLI (`gh`) if not already installed
 4. Guide them through `gh auth login` to authenticate
@@ -92,7 +92,7 @@ This creates the project, builds it, and deploys - all with one command. They'll
 If Vercel didn't automatically link to GitHub, open the dashboard:
 - macOS: `open https://vercel.com/dashboard`
 - Linux: `xdg-open https://vercel.com/dashboard`
-- Windows: `start https://vercel.com/dashboard`
+- Windows: `start "" "https://vercel.com/dashboard"`
 
 Guide them:
 1. Click on their project

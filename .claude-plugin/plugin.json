@@ -1,6 +1,6 @@
 {
   "name": "vibe-builder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Takes you from zero to vibe coding hero with GitHub and Vercel. Perfect for beginners who want to start building and deploying web apps.",
   "author": {
     "name": "James Barney",
