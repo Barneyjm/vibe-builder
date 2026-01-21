@@ -1,0 +1,9 @@
+{
+  "name": "vibe-builder",
+  "description": "Take someone from zero to vibe coding hero with GitHub and Vercel. Perfect for beginners who want to start building and deploying web apps.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Claude"
+  },
+  "license": "MIT"
+}
