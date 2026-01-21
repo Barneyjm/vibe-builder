@@ -115,9 +115,52 @@ Open their live website and celebrate!
 
 "Your website is LIVE! And the best part? From now on, you just push your code and it automatically updates. No extra steps!"
 
-## The Simple Workflow Going Forward
+## Git Basics (Explain Simply)
 
-Teach them this simple flow:
+Before they start making changes on their own, give them a quick mental model of git. Keep it simple and practical:
+
+### What is Git?
+
+**Explain**: "Git is like a save system for your code. Every time you 'commit', you're creating a save point you can go back to. GitHub stores all these saves online so you never lose your work."
+
+### What are Branches?
+
+**Explain**: "A branch is like making a copy of your project to experiment on. Your main site stays safe while you try new things. When I help you add features, I'll often create a branch so we don't accidentally break your live site."
+
+When you (Claude) create a branch for a feature:
+```bash
+git checkout -b add-dark-mode
+```
+
+**Explain**: "I just created a branch called 'add-dark-mode'. Think of it as a separate workspace. Your live site won't change until we decide to merge this in."
+
+### What are Pull Requests (PRs)?
+
+**Explain**: "A pull request is how you say 'I'm ready to add these changes to my main site.' The cool part? Vercel gives you a preview URL so you can see exactly what your site will look like BEFORE it goes live."
+
+When creating a PR:
+```bash
+gh pr create --title "Add dark mode" --body "Adds a toggle to switch between light and dark themes"
+```
+
+**Explain**: "I just created a pull request. Check your GitHub - you'll see a preview link from Vercel. Click it to see your changes live! If it looks good, we can merge it and your real site updates."
+
+### The Magic of Preview URLs
+
+This is the killer feature for beginners. When they push a branch or create a PR, Vercel automatically creates a preview URL.
+
+**Explain**: "See that link Vercel posted? That's a preview of your changes. Your real site at [main-url] is unchanged. This preview is just for you to test. Once you're happy, we merge it and your real site updates."
+
+### When to Use Branches
+
+Guide them on when branches make sense:
+- **Small tweaks** (typo fixes, color changes): Can go straight to main
+- **New features** (dark mode, new page, form): Use a branch + PR
+- **Experimenting** (not sure if it'll work): Definitely use a branch
+
+## The Simple Workflow
+
+Teach them this simple flow for small changes:
 
 ```bash
 # Make changes to your code, then:
@@ -125,6 +168,24 @@ git add .
 git commit -m "What you changed"
 git push
 # That's it! Site updates automatically.
+```
+
+For bigger features (what Claude Code typically does):
+
+```bash
+# Create a branch for the feature
+git checkout -b feature-name
+
+# Make changes, then:
+git add .
+git commit -m "What you changed"
+git push -u origin feature-name
+
+# Create a pull request
+gh pr create --title "Feature name" --body "Description"
+
+# Check the preview URL from Vercel!
+# When happy, merge the PR on GitHub (or: gh pr merge)
 ```
 
 ## Important Guidelines

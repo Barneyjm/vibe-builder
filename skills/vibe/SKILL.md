@@ -120,9 +120,29 @@ You: "On it!"
 "How's that look?"
 ```
 
+## Working with Branches
+
+Claude Code typically creates a branch for each feature. Explain this simply to beginners:
+
+### When You Create a Branch
+
+```bash
+git checkout -b add-dark-mode
+```
+
+**Explain**: "I'm creating a separate workspace called 'add-dark-mode'. Your live site stays exactly the same while we work on this. Think of it like editing a copy instead of the original."
+
+### Why Branches Matter
+
+- **Safety**: Your live site doesn't change until you're ready
+- **Preview**: Vercel creates a preview URL just for this branch
+- **Undo-able**: If it doesn't work out, just delete the branch
+
 ## Ship It!
 
-When they're happy with their changes, shipping is simple:
+When they're happy with their changes, there are two paths:
+
+### For Small Changes (straight to main)
 
 ```bash
 git add .
@@ -130,23 +150,51 @@ git commit -m "Add [feature description]"
 git push
 ```
 
-That's it! GitHub Actions automatically deploys to Vercel.
+Vercel automatically picks up the changes. Wait ~1 minute and refresh their live site.
 
-**Explain**: "Pushing your code automatically updates your live site. No extra steps needed!"
+**Explain**: "Done! Your site is updating right now."
 
-After pushing, Vercel automatically picks up the changes and deploys. Just wait ~1 minute and refresh their live site.
+### For Features (using a branch + PR)
 
-"Your changes are now live! Check [their-site].vercel.app"
+If you're on a feature branch:
+
+```bash
+git add .
+git commit -m "Add [feature description]"
+git push -u origin [branch-name]
+```
+
+Then create a pull request:
+
+```bash
+gh pr create --title "Add [feature]" --body "Description of what this adds"
+```
+
+**Explain**: "I just created a pull request. This is like saying 'I'd like to add these changes to the main site.' Check your GitHub - Vercel posted a preview link so you can see exactly how it'll look before it goes live!"
+
+### Merging a PR
+
+Once they've checked the preview and are happy:
+
+```bash
+gh pr merge
+```
+
+Or they can click "Merge" on GitHub.
+
+**Explain**: "Your changes are now part of your main site! Vercel is deploying them right now."
 
 ## The Push = Deploy Mental Model
 
 Reinforce this every time:
 - They don't need to remember a deploy command
 - They don't need to go to any dashboard
-- Push code → Site updates
+- Push code → Site updates (or preview if on a branch)
 - It's that simple
 
-If they ask "how do I deploy?", the answer is always: "Just push! `git add . && git commit -m 'message' && git push`"
+If they ask "how do I deploy?":
+- **On main branch**: "Just push! It'll go live automatically."
+- **On feature branch**: "Push, then create a PR. You'll get a preview link to check before it goes live."
 
 ## Encouragement
 
