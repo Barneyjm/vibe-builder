@@ -1,143 +1,208 @@
 ---
 name: deploy
-description: Deploy a project to Vercel and optionally push to GitHub. Use this to get a project live on the internet.
+description: Set up automatic deployments so pushing to GitHub deploys to Vercel. Use this to connect GitHub Actions for continuous deployment.
 ---
 
-# Deploy to the World
+# Set Up Automatic Deployments
 
-You are helping someone deploy their project to the internet. This is an exciting moment - their creation will be live!
+You are helping someone set up GitHub Actions so that **pushing code = deploying their site**. This is the simplest mental model: commit your changes, push, and your site updates automatically.
+
+## The Goal
+
+After this setup:
+- `git push` → Site automatically updates
+- No extra commands to remember
+- No manual deployment step
+- Pull requests get preview URLs automatically
 
 ## Prerequisites Check
 
-First, verify they have what they need:
-
 ```bash
-# Check if in a project directory
-ls package.json
-
-# Check if git is initialized
-git status
-
 # Check Vercel CLI
 vercel --version
 
 # Check GitHub CLI
 gh --version
-```
 
-If anything is missing, help them set it up or direct them to the appropriate setup skill.
-
-## Step 1: Commit Any Uncommitted Changes
-
-Check for uncommitted work:
-
-```bash
+# Check if in a git repo
 git status
 ```
 
-If there are changes:
+If anything is missing, help them install it first.
+
+## Step 1: Create GitHub Repository
+
+If they don't have a GitHub repo yet:
 
 ```bash
-git add .
-git commit -m "Ready for deployment"
-```
-
-## Step 2: Create GitHub Repository
-
-Ask: "Do you want to push this to GitHub? (Recommended - it enables automatic deployments)"
-
-If yes, create and push to GitHub:
-
-```bash
-# Get the project name from package.json or directory
 PROJECT_NAME=$(basename $(pwd))
-
-# Create the repository and push
 gh repo create $PROJECT_NAME --public --source=. --push
 ```
 
-**Explain**:
-- "This creates a repository on GitHub and uploads your code"
-- "Your code will be backed up and shareable"
-- "Vercel can auto-deploy when you push changes"
+If they want it private, use `--private` instead.
 
-If they prefer private: use `--private` instead of `--public`
+## Step 2: Link Project to Vercel
 
-## Step 3: Deploy to Vercel
-
-Now the magic moment:
+This creates the Vercel project and gets the IDs we need:
 
 ```bash
-vercel --yes
+vercel link --yes
 ```
 
-**What happens:**
-1. Vercel detects it's a Next.js project
-2. Builds your application
-3. Deploys to their global network
-4. Gives you a URL
+This creates a `.vercel` directory with project settings.
 
-Wait for it to complete. You'll see output like:
-```
-✅ Production: https://project-name.vercel.app
-```
+## Step 3: Get Vercel Credentials
 
-## Step 4: Celebrate!
+We need three things for GitHub Actions:
 
-Open their new live website:
-
-- macOS: `open https://PROJECT_NAME.vercel.app`
-- Linux: `xdg-open https://PROJECT_NAME.vercel.app`
-- Windows: `start https://PROJECT_NAME.vercel.app`
-
-**This is huge!** They just deployed their first website. Make it feel special:
-
-"Your website is LIVE on the internet! Anyone in the world can see it at [URL]. You did it!"
-
-## Step 5: Connect GitHub for Auto-Deploy (if not already)
-
-If they created a GitHub repo, help them connect it for automatic deployments:
-
-1. Open Vercel dashboard:
-   - macOS: `open https://vercel.com/dashboard`
-   - Linux: `xdg-open https://vercel.com/dashboard`
-   - Windows: `start https://vercel.com/dashboard`
-
-2. Guide them:
-   - Click on their project
-   - Go to Settings → Git
-   - Connect their GitHub repository
-   - Now every `git push` will auto-deploy!
-
-## Explain What They Have Now
-
-Break down what just happened:
-
-1. **Live Website**: Their code is running on Vercel's servers worldwide
-2. **Free HTTPS**: Secure connection, no extra setup
-3. **Fast Loading**: Vercel has servers everywhere, so it loads fast for everyone
-4. **Auto-Deploy** (if connected to GitHub): Push code → site updates automatically
-5. **Preview Deployments**: Each branch/PR gets its own preview URL
-
-## What's Next?
-
-Suggest next steps:
-- "Want to add more features to your site?"
-- "Want to connect a custom domain?"
-- "Want to learn how to make changes and see them deploy automatically?"
-
-## Quick Reference
-
-For future deployments, they just need:
+### Get the Project ID and Org ID
 
 ```bash
-# Make changes, then:
+cat .vercel/project.json
+```
+
+Note the `projectId` and `orgId` values.
+
+### Create a Vercel Token
+
+Open the Vercel tokens page:
+- macOS: `open https://vercel.com/account/tokens`
+- Linux: `xdg-open https://vercel.com/account/tokens`
+- Windows: `start https://vercel.com/account/tokens`
+
+Guide them:
+1. Click "Create"
+2. Name it something like "GitHub Actions"
+3. Set scope to the project or full account
+4. Copy the token (they won't see it again!)
+
+## Step 4: Add Secrets to GitHub
+
+Add the three secrets to their GitHub repository:
+
+```bash
+# Add each secret (they'll be prompted for the value)
+gh secret set VERCEL_TOKEN
+gh secret set VERCEL_ORG_ID
+gh secret set VERCEL_PROJECT_ID
+```
+
+For each one, paste the corresponding value when prompted.
+
+**Explain**: "These secrets let GitHub Actions deploy to Vercel on your behalf. They're encrypted and secure."
+
+## Step 5: Create the GitHub Actions Workflow
+
+Create the workflow file:
+
+```bash
+mkdir -p .github/workflows
+```
+
+Then create `.github/workflows/deploy.yml` with this content:
+
+```yaml
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=${{ github.event_name == 'push' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project
+        run: vercel build ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "Deployed to: $url"
+```
+
+## Step 6: Commit and Push
+
+```bash
 git add .
-git commit -m "Description of changes"
+git commit -m "Add automatic deployment via GitHub Actions"
 git push
-
-# That's it! Vercel auto-deploys.
-
-# Or manually deploy:
-vercel --prod
 ```
+
+## Step 7: Watch the Magic
+
+Open GitHub Actions to see it deploy:
+
+```bash
+gh run watch
+```
+
+Or open in browser:
+- macOS: `open $(gh repo view --json url -q .url)/actions`
+- Linux: `xdg-open $(gh repo view --json url -q .url)/actions`
+
+**Explain what's happening**:
+- "See that running workflow? That's GitHub building and deploying your site"
+- "Every time you push, this runs automatically"
+- "Green checkmark = your site is updated!"
+
+## Step 8: Celebrate!
+
+Once the action completes, their site is live! Get the URL:
+
+```bash
+vercel ls --yes | head -5
+```
+
+Open it for them and celebrate:
+"Your site is LIVE and will now update automatically every time you push code!"
+
+## The New Workflow
+
+From now on, deploying is just:
+
+```bash
+git add .
+git commit -m "What you changed"
+git push
+```
+
+That's it. No `vercel` command needed. Push = Deploy.
+
+**Bonus**: Pull requests automatically get preview URLs, so they can test changes before merging.
+
+## Troubleshooting
+
+**Action failed?**
+- Check the workflow logs: `gh run view`
+- Usually it's a missing secret or typo
+
+**Site not updating?**
+- Make sure they pushed to `main` branch
+- Check if the action is running: `gh run list`
+
+**Secret issues?**
+- Re-add with `gh secret set VERCEL_TOKEN` etc.
+- Make sure the Vercel token hasn't expired

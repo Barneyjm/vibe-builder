@@ -120,17 +120,38 @@ You: "On it!"
 "How's that look?"
 ```
 
-## When They're Done
+## Ship It!
 
-When they're happy with their changes:
+When they're happy with their changes, shipping is simple:
 
 ```bash
 git add .
 git commit -m "Add [feature description]"
-git push  # Auto-deploys to Vercel if connected
+git push
 ```
 
+That's it! GitHub Actions automatically deploys to Vercel.
+
+**Explain**: "Pushing your code automatically updates your live site. No extra steps needed!"
+
+After pushing, you can show them the deployment:
+```bash
+gh run watch
+```
+
+Or just wait ~1 minute and refresh their live site.
+
 "Your changes are now live! Check [their-site].vercel.app"
+
+## The Push = Deploy Mental Model
+
+Reinforce this every time:
+- They don't need to remember a deploy command
+- They don't need to go to any dashboard
+- Push code → Site updates
+- It's that simple
+
+If they ask "how do I deploy?", the answer is always: "Just push! `git add . && git commit -m 'message' && git push`"
 
 ## Encouragement
 

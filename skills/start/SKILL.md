@@ -62,13 +62,146 @@ This is the vibe coding part! Based on their app idea:
 4. Run the dev server so they can see their changes: `npm run dev`
 5. Open http://localhost:3000 in their browser
 
-### Step 6: Deploy to the World
+### Step 6: Set Up Automatic Deployments
 
-Get their creation live on the internet:
+This is where the magic happens - set it up so **pushing code = deploying their site**:
 
-1. Create a GitHub repository: `gh repo create <project-name> --public --source=. --push`
-2. Deploy to Vercel: `vercel --yes`
-3. Celebrate! Share their live URL with them
+#### 6a. Create GitHub Repository
+
+```bash
+PROJECT_NAME=$(basename $(pwd))
+gh repo create $PROJECT_NAME --public --source=. --push
+```
+
+**Explain**: "This uploads your code to GitHub. Think of it as a backup that also lets you share your code."
+
+#### 6b. Link Project to Vercel
+
+```bash
+vercel link --yes
+```
+
+Then read the project settings:
+```bash
+cat .vercel/project.json
+```
+
+Note the `projectId` and `orgId` values.
+
+#### 6c. Create a Vercel Token
+
+Open the Vercel tokens page:
+- macOS: `open https://vercel.com/account/tokens`
+- Linux: `xdg-open https://vercel.com/account/tokens`
+- Windows: `start https://vercel.com/account/tokens`
+
+Guide them:
+1. Click "Create"
+2. Name it "GitHub Actions"
+3. Copy the token (they won't see it again!)
+
+#### 6d. Add Secrets to GitHub
+
+```bash
+gh secret set VERCEL_TOKEN
+gh secret set VERCEL_ORG_ID
+gh secret set VERCEL_PROJECT_ID
+```
+
+For each one, paste the corresponding value when prompted.
+
+**Explain**: "These secrets let GitHub automatically deploy to Vercel for you. They're encrypted and secure."
+
+#### 6e. Create GitHub Actions Workflow
+
+```bash
+mkdir -p .github/workflows
+```
+
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=${{ github.event_name == 'push' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project
+        run: vercel build ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        run: |
+          url=$(vercel deploy --prebuilt ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "Deployed to: $url"
+```
+
+#### 6f. Push and Watch
+
+```bash
+git add .
+git commit -m "Add automatic deployment"
+git push
+```
+
+Watch the deployment:
+```bash
+gh run watch
+```
+
+**Explain**: "See that? GitHub is now building and deploying your site automatically. Every time you push code, this happens!"
+
+### Step 7: Celebrate!
+
+Once the action completes, get the URL:
+```bash
+vercel ls --yes | head -5
+```
+
+Open their new live website and celebrate!
+
+**This is huge!** They now have:
+- A live website anyone can visit
+- Automatic deployments (push = site updates)
+- No commands to remember except `git push`
+
+"Your website is LIVE! And the best part? From now on, you just push your code and it automatically updates. No extra steps!"
+
+## The Simple Workflow Going Forward
+
+Teach them this simple flow:
+
+```bash
+# Make changes to your code, then:
+git add .
+git commit -m "What you changed"
+git push
+# That's it! Your site updates automatically.
+```
 
 ## Important Guidelines
 
@@ -78,6 +211,7 @@ Get their creation live on the internet:
 - **Keep it visual**: Open browsers, show the running app, make it tangible
 - **Stay focused**: Don't overwhelm with too many options or advanced concepts
 - **Use their app idea**: Make everything personalized to what they want to build
+- **Push = Deploy**: Reinforce this mental model. They don't need to remember separate deployment commands.
 
 ## Example Interaction Flow
 
